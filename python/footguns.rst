@@ -6,6 +6,9 @@ Some not-so-obvious problems that can come up and how to solve them.
 ABCs and dataclasses
 --------------------
 
+inherited attributes
+^^^^^^^^^^^^^^^^^^^^
+
 Beware mixing ABCs and dataclasses: ``ABCMeta`` defines some attributes which can be picked up by the dataclass machinery by mistake. e.g:
 
 .. code:: python
@@ -43,10 +46,38 @@ This will fail to import with a ``TypeError``:
       raise TypeError(f'non-default argument {f.name!r} '
    TypeError: non-default argument 'foo' follows default argument
 
-
 Solutions
-^^^^^^^^^
+"""""""""
 
 1. re-order the attributes -- if ``register`` is after the other attributes,
    the dataclass machinery will not have a problem with it
 2. use a diferent attribute name
+
+abstract properties
+^^^^^^^^^^^^^^^^^^^
+
+Dataclasses canot be used to implement abstract properties:
+
+.. code:: python
+
+   import abc
+   from dataclasses import dataclass
+
+
+   class Base(abc.ABC):
+       @property
+       @abc.abstractmethod
+       def foo(self) -> str: ...
+
+
+   @dataclass(frozen=True)
+   class C(Base):
+       foo: str
+
+
+   c = C(foo="hello")  # TypeError: Can't instantiate abstract class C with abstract method foo
+
+Solutions
+"""""""""
+
+An ``attrs`` class will satisfy the ABC.
