@@ -9,7 +9,8 @@ ABCs and dataclasses
 inherited attributes
 ^^^^^^^^^^^^^^^^^^^^
 
-Beware mixing ABCs and dataclasses: ``ABCMeta`` defines some attributes which can be picked up by the dataclass machinery by mistake. e.g:
+Beware mixing ABCs and dataclasses: ``ABCMeta`` defines some attributes which
+can be picked up by the dataclass machinery by mistake. e.g:
 
 .. code:: python
 
@@ -52,6 +53,7 @@ Solutions
 1. re-order the attributes -- if ``register`` is after the other attributes,
    the dataclass machinery will not have a problem with it
 2. use a diferent attribute name
+3. use ``attrs``
 
 abstract properties
 ^^^^^^^^^^^^^^^^^^^
